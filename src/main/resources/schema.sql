@@ -8,6 +8,16 @@ CREATE TABLE IF NOT EXISTS position_dict (
                                              version             integer
 );
 
+CREATE TABLE IF NOT EXISTS department (
+                                          id                  SERIAL PRIMARY KEY,
+                                          name                varchar(100) NOT NULL,
+                                          creation_day        date NOT NULL,
+                                          head_department_id  integer,
+                                          version             integer
+);
+ALTER TABLE department ADD FOREIGN KEY (head_department_id) REFERENCES department(id);
+CREATE INDEX IX_head_department_id ON department (head_department_id);
+
 CREATE TABLE employee (
                                           id                  SERIAL PRIMARY KEY,
                                           name                varchar(100) NOT NULL,
@@ -19,16 +29,13 @@ CREATE TABLE employee (
                                           email               varchar(100) NOT NULL,
                                           employment_day      date NOT NULL,
                                           dismissal_day       date,
-                                          position_id         int REFERENCES position_dict(id),
                                           salary              numeric NOT NULL,
                                           chief               boolean DEFAULT FALSE,
+                                          position_id         integer not null,
+                                          department_id       integer not null,
                                           version             integer
 );
-
-CREATE TABLE IF NOT EXISTS department (
-                                        id                  SERIAL PRIMARY KEY,
-                                        name                varchar(100) NOT NULL,
-                                        creation_day        date NOT NULL,
-                                        version             integer
-);
-
+ALTER TABLE employee ADD FOREIGN KEY (position_id) REFERENCES position_dict(id);
+CREATE INDEX IX_position_id ON employee (position_id);
+ALTER TABLE employee ADD FOREIGN KEY (department_id) REFERENCES department(id);
+CREATE INDEX IX_department_id ON employee (department_id);
