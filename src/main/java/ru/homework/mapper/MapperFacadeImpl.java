@@ -45,7 +45,9 @@ public class MapperFacadeImpl implements MapperFacade {
     @Override
     public DepartmentView mapToDepartmentView(Department department, DepartmentView departmentView) {
         mapperFactory.getMapperFacade(Department.class, DepartmentView.class).map(department, departmentView);
-        departmentView.setHeadDepartmentId(department.getHeadDepartment().getId());
+        if (department.getHeadDepartment() != null) {
+            departmentView.setHeadDepartmentId(department.getHeadDepartment().getId());
+        }
         return departmentView;
     }
 }

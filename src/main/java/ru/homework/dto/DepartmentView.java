@@ -14,7 +14,7 @@ public class DepartmentView {
     @Size(max = 100)
     private String name;
 
-    @NotEmpty
+//    @NotEmpty
     private Date creationDay;
 
     @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")

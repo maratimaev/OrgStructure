@@ -6,4 +6,5 @@ public interface DepartmentService {
 
     DepartmentView findByName(String name);
     void create(DepartmentView departmentView);
+    DepartmentView update(DepartmentView departmentView);
 }

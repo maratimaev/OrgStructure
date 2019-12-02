@@ -9,6 +9,8 @@ import ru.homework.model.Department;
 import ru.homework.repository.DepartmentRepository;
 import ru.homework.service.DepartmentService;
 
+import java.util.Optional;
+
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
@@ -29,7 +31,34 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional
     public void create(DepartmentView departmentView) {
         Department department = mapperFacade.map(departmentView, Department.class);
+        Optional<Department> optional = departmentRepository.findById(departmentView.getHeadDepartmentId());
+        if (!optional.isPresent()) {
+            throw new RuntimeException();
+            //todo
+        }
+        department.setHeadDepartment(optional.get());
         departmentRepository.saveAndFlush(department);
     }
+
+    @Override
+    @Transactional
+    public DepartmentView update(DepartmentView departmentView) {
+        Optional<Department> optional = departmentRepository.findById(departmentView.getId());
+        if (!optional.isPresent()) {
+            throw new RuntimeException();
+            //todo
+        }
+        Department department = optional.get();
+        if (!department.getName().equals(departmentView.getName())) {
+            //todo error doubled name
+            if(departmentRepository.findDepartmentByName(departmentView.getName()) == null) {
+                department.setName(departmentView.getName());
+            }
+        }
+        departmentRepository.saveAndFlush(department);
+        DepartmentView departmentView1 = mapperFacade.mapToDepartmentView(department, new DepartmentView());
+        return departmentView1;
+    }
+
 
 }
