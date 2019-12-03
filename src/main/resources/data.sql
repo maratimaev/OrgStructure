@@ -3,10 +3,13 @@ INSERT INTO position_dict (name, description, version) VALUES ('Ведущий �
 INSERT INTO position_dict (name, description, version) VALUES ('Главный инженер', null, 0);
 INSERT INTO position_dict (name, description, version) VALUES ('Начальник отдела', null, 0);
 
-INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел планирования', '2018-05-06', null, 0);
-INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Бухгалтерия', '2018-04-06', 1, 0);
-INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел разраработки', '2018-07-16', 2, 0);
-INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел тестирования', '2019-01-24', 2, 0);
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел планирования', '2018-05-06', null, 0);  --1
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Бухгалтерия', '2018-04-06', 1, 0);            --2
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел разраработки', '2018-07-16', 2, 0);     --3
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел тестирования', '2019-01-24', 2, 0);     --4
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел тестирования1', '2019-02-21', 3, 0);    --5
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел тестирования2', '2019-03-22', 3, 0);    --6
+INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел тестирования3', '2019-04-23', 5, 0);    --7
 
 INSERT INTO employee (name, second_name, middle_name, sex, birthday, phone_number, email,
                       employment_day, dismissal_day, position_id, salary, chief, department_id, version)
