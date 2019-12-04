@@ -10,7 +10,7 @@ import javax.persistence.Version;
 
 @Entity
 @Table(name = "position_dict")
-public class PositionDict {
+public class Position {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

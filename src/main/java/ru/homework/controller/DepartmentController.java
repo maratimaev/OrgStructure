@@ -55,4 +55,10 @@ public class DepartmentController {
         List<DepartmentView> departmentViews = departmentService.findChildDepartments(id, true);
         return departmentViews;
     }
+
+    @GetMapping(value = "/headDepartments/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<DepartmentView> findHeadDepartments(@PathVariable int id) {
+        List<DepartmentView> departmentViews = departmentService.findHeadDepartments(id);
+        return departmentViews;
+    }
 }

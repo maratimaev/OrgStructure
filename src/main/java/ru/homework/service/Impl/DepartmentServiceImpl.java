@@ -26,7 +26,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Transactional(readOnly = true)
     public DepartmentView findByName(String name) {
         Department department = departmentRepository.findDepartmentByName(name);
-        return mapperFacade.mapToDepartmentView(department, new DepartmentView());
+        return mapperFacade.map(department, DepartmentView.class);
     }
 
     @Override
@@ -47,7 +47,6 @@ public class DepartmentServiceImpl implements DepartmentService {
                 department.setName(departmentView.getName());
             }
         }
-
         if (department.getHeadDepartment().getId() != (departmentView.getHeadDepartmentId())) { //todo check for null
             for(Department child : department.getChildDepartments()) {
                 child.setHeadDepartment(department.getHeadDepartment());
@@ -57,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setChildDepartments(null);
         }
         departmentRepository.saveAndFlush(department);
-        DepartmentView departmentView1 = mapperFacade.mapToDepartmentView(department, new DepartmentView());
+        DepartmentView departmentView1 = mapperFacade.map(department, DepartmentView.class);
         return departmentView1;
     }
 
@@ -82,6 +81,19 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentViews;
     }
 
+    @Override
+    public List<DepartmentView> findHeadDepartments(int id) {
+        Department department = findById(id);
+        Department headDepartment = department.getHeadDepartment();
+        List<Department> headDepartments = new ArrayList<>();
+        while (headDepartment != null) {
+            headDepartments.add(headDepartment);
+            headDepartment = headDepartment.getHeadDepartment();
+        }
+        List<DepartmentView> departmentViews = mapperFacade.mapAsList(headDepartments, DepartmentView.class);
+        return departmentViews;
+    }
+
     private List<Department> getAllChilds(Department department, List<Department> result) {
         List<Department> departments = department.getChildDepartments();
         result.addAll(departments);
@@ -99,5 +111,4 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return optional.get();
     }
-
 }

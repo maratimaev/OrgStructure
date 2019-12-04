@@ -1,6 +1,8 @@
 package ru.homework.mapper;
 
+import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.stereotype.Service;
 import ru.homework.dto.DepartmentView;
@@ -17,6 +19,17 @@ public class MapperFacadeImpl implements MapperFacade {
     @PostConstruct
     private void init(){
         mapperFactory = new DefaultMapperFactory.Builder().build();
+        mapperFactory.classMap(Department.class, DepartmentView.class)
+                .customize(new CustomMapper<Department, DepartmentView>() {
+                    @Override
+                    public void mapAtoB(Department department, DepartmentView departmentView, MappingContext mappingContext) {
+                        if (department.getHeadDepartment() != null) {
+                            departmentView.setHeadDepartmentId(department.getHeadDepartment().getId());
+                        }
+                    }
+                })
+                .byDefault()
+                .register();
     }
     /**
      * {@inheritDoc}
@@ -40,14 +53,5 @@ public class MapperFacadeImpl implements MapperFacade {
     @Override
     public <S, D> List<D> mapAsList(Iterable<S> source, Class<D> destinationClass) {
         return mapperFactory.getMapperFacade().mapAsList(source, destinationClass);
-    }
-
-    @Override
-    public DepartmentView mapToDepartmentView(Department department, DepartmentView departmentView) {
-        mapperFactory.getMapperFacade(Department.class, DepartmentView.class).map(department, departmentView);
-        if (department.getHeadDepartment() != null) {
-            departmentView.setHeadDepartmentId(department.getHeadDepartment().getId());
-        }
-        return departmentView;
     }
 }

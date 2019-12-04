@@ -14,4 +14,5 @@ public interface DepartmentService {
 
     List<DepartmentView> findChildDepartments(int id, boolean allHierarchy);
 
+    List<DepartmentView> findHeadDepartments(int id);
 }

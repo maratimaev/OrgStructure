@@ -1,7 +1,7 @@
-INSERT INTO position_dict (name, description, version) VALUES ('Инженер', null, 0);
-INSERT INTO position_dict (name, description, version) VALUES ('Ведущий инженер', 'Ведущий инженер программист', 0);
-INSERT INTO position_dict (name, description, version) VALUES ('Главный инженер', null, 0);
-INSERT INTO position_dict (name, description, version) VALUES ('Начальник отдела', null, 0);
+INSERT INTO position (name, description, version) VALUES ('Инженер', null, 0);
+INSERT INTO position (name, description, version) VALUES ('Ведущий инженер', 'Ведущий инженер программист', 0);
+INSERT INTO position (name, description, version) VALUES ('Главный инженер', null, 0);
+INSERT INTO position (name, description, version) VALUES ('Начальник отдела', null, 0);
 
 INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Отдел планирования', '2018-05-06', null, 0);  --1
 INSERT INTO department (name, creation_day, head_department_id, version) VALUES ('Бухгалтерия', '2018-04-06', 1, 0);            --2

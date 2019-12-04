@@ -41,6 +41,4 @@ public interface MapperFacade {
      * @return
      */
     <S, D> List<D> mapAsList(Iterable<S> source, Class<D> destinationClass);
-
-    DepartmentView mapToDepartmentView(Department department, DepartmentView departmentView);
 }

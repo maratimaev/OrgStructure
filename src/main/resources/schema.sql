@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS position_dict;
 DROP TABLE IF EXISTS department;
-CREATE TABLE IF NOT EXISTS position_dict (
+CREATE TABLE IF NOT EXISTS position (
                                              id                  SERIAL PRIMARY KEY,
                                              name                varchar(100) NOT NULL,
                                              description         varchar(500),
@@ -35,7 +35,7 @@ CREATE TABLE employee (
                                           department_id       integer not null,
                                           version             integer
 );
-ALTER TABLE employee ADD FOREIGN KEY (position_id) REFERENCES position_dict(id);
+ALTER TABLE employee ADD FOREIGN KEY (position_id) REFERENCES position(id);
 CREATE INDEX IX_position_id ON employee (position_id);
 ALTER TABLE employee ADD FOREIGN KEY (department_id) REFERENCES department(id);
 CREATE INDEX IX_department_id ON employee (department_id);
