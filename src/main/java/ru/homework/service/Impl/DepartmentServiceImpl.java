@@ -94,6 +94,16 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentViews;
     }
 
+    @Override
+    public Department findById(int id) {
+        Optional<Department> optional = departmentRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new RuntimeException();
+            //todo
+        }
+        return optional.get();
+    }
+
     private List<Department> getAllChilds(Department department, List<Department> result) {
         List<Department> departments = department.getChildDepartments();
         result.addAll(departments);
@@ -101,14 +111,5 @@ public class DepartmentServiceImpl implements DepartmentService {
             getAllChilds(dep, result);
         }
         return result;
-    }
-
-    private Department findById(int id) {
-        Optional<Department> optional = departmentRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new RuntimeException();
-            //todo
-        }
-        return optional.get();
     }
 }

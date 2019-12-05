@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 @Entity
-@Table(name = "position_dict")
+@Table(name = "position")
 public class Position {
 
     @Id

@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS employee;
-DROP TABLE IF EXISTS position_dict;
+DROP TABLE IF EXISTS position;
 DROP TABLE IF EXISTS department;
 CREATE TABLE IF NOT EXISTS position (
                                              id                  SERIAL PRIMARY KEY,

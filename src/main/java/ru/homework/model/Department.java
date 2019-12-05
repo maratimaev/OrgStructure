@@ -38,6 +38,9 @@ public class Department {
     @OneToMany(mappedBy = "headDepartment")
     private List<Department> childDepartments;
 
+    @OneToMany(mappedBy = "department")
+    private List<Employee> employees;
+
     @Version
     private int version;
 
@@ -75,5 +78,13 @@ public class Department {
 
     public void setChildDepartments(List<Department> childDepartments) {
         this.childDepartments = childDepartments;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }
