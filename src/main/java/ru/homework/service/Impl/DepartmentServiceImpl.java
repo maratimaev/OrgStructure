@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.homework.dto.DepartmentView;
+import ru.homework.dto.EmployeeView;
 import ru.homework.mapper.MapperFacade;
 import ru.homework.model.Department;
+import ru.homework.model.Employee;
 import ru.homework.repository.DepartmentRepository;
 import ru.homework.service.DepartmentService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +23,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Autowired
+    private EmployeeServiceImpl  employeeService;
+
+    @Autowired
     private MapperFacade mapperFacade;
 
     @Override
@@ -27,6 +33,29 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentView findByName(String name) {
         Department department = departmentRepository.findDepartmentByName(name);
         return mapperFacade.map(department, DepartmentView.class);
+    }
+
+    @Override
+    public DepartmentView get(int id) {
+        Department department = findById(id);
+        DepartmentView departmentView = mapperFacade.map(department, DepartmentView.class);
+        Employee chief = employeeService.findChiefInDepartment(department);
+        if (chief != null) {
+            departmentView.setChief(chief.getName() + " " + chief.getSecondName());
+        }
+        int employersCount = employeeService.countDepartmentEmployers(department);
+        departmentView.setEmployersCount(employersCount);
+        return departmentView;
+    }
+
+    @Override
+    public BigDecimal salaryFund(int id) {
+        List<Employee> employees = employeeService.findEmployersInDepartment(id);
+        BigDecimal salaryFund = new BigDecimal(0);
+        for (Employee employee : employees) {
+            salaryFund = salaryFund.add(employee.getSalary());
+        }
+        return salaryFund;
     }
 
     @Override
@@ -63,6 +92,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     @Transactional
     public void delete(int id) {
+        List<EmployeeView> employeeViews = employeeService.findEmployerViewsInDepartment(id);
+        if (employeeViews == null) {
+            throw new RuntimeException();
+        }
         Department department = findById(id);
         departmentRepository.delete(department);
     }

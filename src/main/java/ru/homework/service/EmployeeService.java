@@ -1,6 +1,8 @@
 package ru.homework.service;
 
 import ru.homework.dto.EmployeeView;
+import ru.homework.model.Department;
+import ru.homework.model.Employee;
 
 import java.util.Date;
 import java.util.List;
@@ -9,7 +11,8 @@ public interface EmployeeService {
 
     EmployeeView get(int id);
 
-    List<EmployeeView> findEmployersInDepartment(int departmentId);
+    List<EmployeeView> findEmployerViewsInDepartment(int departmentId);
+    List<Employee> findEmployersInDepartment(int departmentId);
 
     void create(EmployeeView employeeView);
 
@@ -24,4 +27,7 @@ public interface EmployeeService {
     EmployeeView getChief(int employerId);
 
     List<EmployeeView> findByFields(EmployeeView employeeView);
+
+    Employee findChiefInDepartment(Department department);
+    int countDepartmentEmployers(Department department);
 }

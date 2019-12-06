@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface EmployeeRepository  extends JpaRepository<Employee, Integer>, JpaSpecificationExecutor<Employee> {
     List<Employee> findAllByDepartment(Department department);
+    Employee findEmployeeByChiefAndDepartment(boolean isChief, Department department);
+    int countEmployeesByDepartment(Department department);
 }

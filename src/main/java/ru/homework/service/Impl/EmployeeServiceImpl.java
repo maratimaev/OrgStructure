@@ -43,11 +43,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EmployeeView> findEmployersInDepartment(int departmentId) {
-        Department department = departmentService.findById(departmentId);
-        List<Employee> employees = employeeRepository.findAllByDepartment(department);
+    public List<EmployeeView> findEmployerViewsInDepartment(int departmentId) {
+        List<Employee> employees = findEmployersInDepartment(departmentId);
         List<EmployeeView> employeeViews = mapperFacade.mapAsList(employees, EmployeeView.class);
         return employeeViews;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Employee> findEmployersInDepartment(int departmentId) {
+        Department department = departmentService.findById(departmentId);
+        List<Employee> employees = employeeRepository.findAllByDepartment(department);
+        return employees;
+    }
+
+    @Override
+    public Employee findChiefInDepartment(Department department) {
+        Employee employee = employeeRepository.findEmployeeByChiefAndDepartment(true, department);
+        return employee;
+    }
+
+    @Override
+    public int countDepartmentEmployers(Department department) {
+        return employeeRepository.countEmployeesByDepartment(department);
     }
 
     @Override
@@ -113,15 +131,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional(readOnly = true)
     public List<EmployeeView> findByFields(EmployeeView employeeView) {
-        List<Employee> list = employeeRepository.findAll(
-                Specifications.findBy(
-                        employeeView,
-                        officeService.getById(employerView.getOfficeId()),
-                        citizenshipService.getByCode(employerView.getCitizenshipCode()),
-                        documentService.getByName(employerView.getDocName())
-                )
-        );
-        return null;
+        List<Employee> findedEmployers = employeeRepository.findAll(findBy(employeeView));
+        return mapperFacade.mapAsList(findedEmployers, EmployeeView.class);
     }
 
     @Override
@@ -154,26 +165,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         return optional.get();
     }
 
-    public static Specification<Employee> findBy(EmployeeView employeeView, Integer positionId, Integer departmentId) {
+    private Specification<Employee> findBy(EmployeeView employeeView) {
         return new Specification<Employee>() {
             @Override
             public Predicate toPredicate(Root<Employee> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> predicates = new ArrayList<>();
-//                try {
-                    if (positionId != null) {
-                        predicates.add(cb.equal(root.get("position"), positionId));
-                    }
-                    if (departmentId != null) {
-                        predicates.add(cb.equal(root.get("department"), departmentId));
-                    }
-//                } catch (NumberFormatException ex) {
-//                    throw new CantFindByParam(String.format(" wrong convert officeId=%s or docCode=%s or citizenshipCode=%s",
-//                            employerView.getOfficeId(), employerView.getDocCode(), employerView.getCitizenshipCode()), ex);
-//                }
+
+                int positionId = employeeView.getPositionId();
+                if (positionId != 0) {
+                    predicates.add(cb.equal(root.get("position"), positionId));
+                }
+
+                int departmentId = employeeView.getDepartmentId();
+                if (departmentId != 0) {
+                    predicates.add(cb.equal(root.get("department"), departmentId));
+                }
+
                 String name = employeeView.getName();
                 if (name != null && !name.isEmpty()) {
                     predicates.add(cb.equal(root.get("name"), name));
                 }
+
                 String secondName = employeeView.getSecondName();
                 if (secondName != null && !secondName.isEmpty()) {
                     predicates.add(cb.equal(root.get("secondName"), secondName));

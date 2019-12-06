@@ -1,36 +1,63 @@
 package ru.homework.dto;
 
+import ru.homework.dto.profile.InputProfile;
+
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class EmployeeView {
 
+    @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")
     private int id;
 
+    @NotEmpty(groups = {InputProfile.Create.class})
+    @Size(max = 100, groups = {InputProfile.Create.class})
+    @Pattern(regexp = "^[А-Яа-я]+$")
     private String name;
 
+    @NotEmpty(groups = {InputProfile.Create.class})
+    @Size(max = 100, groups = {InputProfile.Create.class})
+    @Pattern(regexp = "^[А-Яа-я]+$")
     private String secondName;
 
+    @Size(max = 100)
+    @Pattern(regexp = "^[А-Яа-я]+$")
     private String middleName;
 
+    @NotNull(groups = {InputProfile.Create.class})
     private boolean sex;
 
+    @NotNull(groups = {InputProfile.Create.class})
+    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
     private Date birthday;
 
+    @NotNull(groups = {InputProfile.Create.class})
+    @Size(max = 11, groups = {InputProfile.Create.class})
     private String phoneNumber;
 
+    @NotNull(groups = {InputProfile.Create.class})
+    @Email
     private String email;
 
+    @NotNull(groups = {InputProfile.Create.class})
+    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
     private Date employmentDay;
 
+    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
     private Date dismissalDay;
 
+    @NotNull(groups = {InputProfile.Create.class})
+    @Digits(integer = 10, fraction = 0)
     private BigDecimal salary;
 
+    @NotNull(groups = {InputProfile.Create.class})
     private boolean chief;
 
+    @NotNull(groups = {InputProfile.Create.class})
     private int positionId;
 
+    @NotNull(groups = {InputProfile.Create.class})
     private int departmentId;
 
     public int getId() {

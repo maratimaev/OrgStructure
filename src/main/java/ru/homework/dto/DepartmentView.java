@@ -20,6 +20,10 @@ public class DepartmentView {
     @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")
     private int headDepartmentId;
 
+    private String chief;
+
+    private int employersCount;
+
     public int getId() {
         return id;
     }
@@ -50,5 +54,21 @@ public class DepartmentView {
 
     public void setHeadDepartmentId(int headDepartmentId) {
         this.headDepartmentId = headDepartmentId;
+    }
+
+    public String getChief() {
+        return chief;
+    }
+
+    public void setChief(String chief) {
+        this.chief = chief;
+    }
+
+    public int getEmployersCount() {
+        return employersCount;
+    }
+
+    public void setEmployersCount(int employersCount) {
+        this.employersCount = employersCount;
     }
 }
