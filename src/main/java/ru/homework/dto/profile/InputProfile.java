@@ -9,4 +9,10 @@ public interface InputProfile {
      * Проверка корректности полей при запросе списка
      */
     interface Create { }
+
+    interface Update {}
+
+    interface Dismiss{}
+
+    interface Name {}
 }

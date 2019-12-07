@@ -12,7 +12,16 @@ public interface EmployeeService {
     EmployeeView get(int id);
 
     List<EmployeeView> findEmployerViewsInDepartment(int departmentId);
+
     List<Employee> findEmployersInDepartment(int departmentId);
+
+    EmployeeView getChief(int employerId);
+
+    List<EmployeeView> findByFields(EmployeeView employeeView);
+
+    Employee findChiefInDepartment(Department department);
+
+    int countDepartmentEmployers(Department department);
 
     void create(EmployeeView employeeView);
 
@@ -23,11 +32,4 @@ public interface EmployeeService {
     EmployeeView transfer(int employerId, int departmentId);
 
     List<EmployeeView> transferAll(int sourceDepartmentId, int destinationDepartmentId);
-
-    EmployeeView getChief(int employerId);
-
-    List<EmployeeView> findByFields(EmployeeView employeeView);
-
-    Employee findChiefInDepartment(Department department);
-    int countDepartmentEmployers(Department department);
 }

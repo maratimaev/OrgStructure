@@ -1,5 +1,10 @@
 package ru.homework.dto;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.format.annotation.DateTimeFormat;
+import ru.homework.dto.profile.InputProfile;
+import ru.homework.dto.profile.OutputProfile;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -7,21 +12,27 @@ import java.util.Date;
 
 public class DepartmentView {
 
-    @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")
+    @NotEmpty(groups = {InputProfile.Update.class})
     private int id;
 
-    @NotEmpty
-    @Size(max = 100)
+    @JsonView(OutputProfile.Short.class)
+    @NotEmpty(groups = {InputProfile.Create.class, InputProfile.Name.class})
+    @Size(max = 100, groups = {InputProfile.Update.class})
     private String name;
 
-//    @NotEmpty
+    @JsonView(OutputProfile.Short.class)
+    @NotEmpty(groups = {InputProfile.Create.class})
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date creationDay;
 
-    @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")
+    @JsonView(OutputProfile.Short.class)
+    @NotEmpty(groups = {InputProfile.Create.class})
     private int headDepartmentId;
 
+    @JsonView(OutputProfile.DepartmentInfo.class)
     private String chief;
 
+    @JsonView(OutputProfile.DepartmentInfo.class)
     private int employersCount;
 
     public int getId() {

@@ -1,25 +1,31 @@
 package ru.homework.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import ru.homework.dto.DepartmentView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.homework.dto.EmployeeView;
 import ru.homework.dto.profile.InputProfile;
-import ru.homework.model.Department;
-import ru.homework.service.DepartmentService;
+import ru.homework.dto.result.Success;
 import ru.homework.service.EmployeeService;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping(value = "/get/{employerId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EmployeeView get(@PathVariable int employerId) {
@@ -42,17 +48,18 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void create(@RequestBody @Validated({InputProfile.Create.class}) EmployeeView employeeView) {
+    public Success create(@RequestBody @Validated({InputProfile.Create.class}) EmployeeView employeeView) {
          employeeService.create(employeeView);
+         return new Success();
     }
 
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EmployeeView update(@RequestBody EmployeeView employeeView) {
+    public EmployeeView update(@RequestBody @Validated({InputProfile.Update.class}) EmployeeView employeeView) {
         return employeeService.update(employeeView);
     }
 
     @PutMapping(value = "/dismiss/{employerId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EmployeeView dismiss(@PathVariable int employerId, @RequestBody EmployeeView employeeView) {
+    public EmployeeView dismiss(@PathVariable int employerId, @RequestBody @Validated({InputProfile.Dismiss.class}) EmployeeView employeeView) {
         return employeeService.dismiss(employerId, employeeView.getDismissalDay());
     }
 
@@ -65,5 +72,4 @@ public class EmployeeController {
     public List<EmployeeView> transferAll(@RequestParam int sourceDepartmentId, @RequestParam int destinationDepartmentId) {
         return employeeService.transferAll(sourceDepartmentId, destinationDepartmentId);
     }
-
 }

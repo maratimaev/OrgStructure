@@ -1,54 +1,63 @@
 package ru.homework.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.homework.dto.profile.InputProfile;
+import ru.homework.dto.validator.DismissalDay;
+import ru.homework.dto.validator.EmploymentDay;
+import ru.homework.dto.validator.Salary;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@DismissalDay(groups = {InputProfile.Create.class})
+@EmploymentDay(groups = {InputProfile.Create.class})
+@Salary(groups = {InputProfile.Create.class})
 public class EmployeeView {
 
-    @Pattern(regexp = "\\b(?!(?:0)\\b)\\d{1,9}\\b")
+    @NotEmpty(groups = {InputProfile.Update.class})
     private int id;
 
     @NotEmpty(groups = {InputProfile.Create.class})
     @Size(max = 100, groups = {InputProfile.Create.class})
-    @Pattern(regexp = "^[А-Яа-я]+$")
+    @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
     private String name;
 
     @NotEmpty(groups = {InputProfile.Create.class})
     @Size(max = 100, groups = {InputProfile.Create.class})
-    @Pattern(regexp = "^[А-Яа-я]+$")
+    @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
     private String secondName;
 
-    @Size(max = 100)
-    @Pattern(regexp = "^[А-Яа-я]+$")
+    @Size(max = 100, groups = {InputProfile.Create.class})
+    @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
     private String middleName;
 
     @NotNull(groups = {InputProfile.Create.class})
     private boolean sex;
 
     @NotNull(groups = {InputProfile.Create.class})
-    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     @NotNull(groups = {InputProfile.Create.class})
     @Size(max = 11, groups = {InputProfile.Create.class})
+    @Pattern(regexp = "^[“+-0123456789() ]+$", groups = {InputProfile.Create.class})
     private String phoneNumber;
 
     @NotNull(groups = {InputProfile.Create.class})
-    @Email
+    @Email(groups = {InputProfile.Create.class})
     private String email;
 
     @NotNull(groups = {InputProfile.Create.class})
-    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date employmentDay;
 
-    @Pattern(regexp = "[0-9]{4}-(0[1-9]|1[0-2])-([0-2][0-9]|3[0-1])")
+    @NotEmpty(groups = {InputProfile.Dismiss.class})
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dismissalDay;
 
     @NotNull(groups = {InputProfile.Create.class})
-    @Digits(integer = 10, fraction = 0)
+    @Digits(integer = 10, fraction = 0, groups = {InputProfile.Create.class})
     private BigDecimal salary;
 
     @NotNull(groups = {InputProfile.Create.class})
