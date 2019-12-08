@@ -35,3 +35,11 @@ INSERT INTO employee (name, second_name, middle_name, sex, birthday, phone_numbe
                       employment_day, dismissal_day, position_id, salary, chief, department_id, version)
 VALUES ('Ольга', 'Иванова', 'Петровна', false, '1985-09-08', '81344656789', 'olga@ya.ru',
         '2016-08-19', null, 2, 200000, false, 4, 0);
+
+INSERT INTO salary (department_id, fund_salary) VALUES (1, 100);
+INSERT INTO salary (department_id, fund_salary) VALUES (2, 200);
+INSERT INTO salary (department_id, fund_salary) VALUES (3, 300);
+INSERT INTO salary (department_id, fund_salary) VALUES (4, 400);
+INSERT INTO salary (department_id, fund_salary) VALUES (5, 500);
+INSERT INTO salary (department_id, fund_salary) VALUES (6, 600);
+INSERT INTO salary (department_id, fund_salary) VALUES (7, 700);

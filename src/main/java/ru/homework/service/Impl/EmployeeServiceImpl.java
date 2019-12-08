@@ -1,5 +1,7 @@
 package ru.homework.service.Impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,20 +28,17 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-    private final DepartmentService departmentService;
+    @Autowired
+    private DepartmentService departmentService;
 
-    private final PositionService positionService;
+    @Autowired
+    private PositionService positionService;
 
-    private final MapperFacade mapperFacade;
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, DepartmentService departmentService, PositionService positionService, MapperFacade mapperFacade) {
-        this.employeeRepository = employeeRepository;
-        this.departmentService = departmentService;
-        this.positionService = positionService;
-        this.mapperFacade = mapperFacade;
-    }
+    @Autowired
+    private MapperFacade mapperFacade;
 
     @Override
     @Transactional(readOnly = true)

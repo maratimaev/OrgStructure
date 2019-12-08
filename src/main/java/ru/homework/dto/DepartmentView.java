@@ -1,6 +1,7 @@
 package ru.homework.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.homework.dto.profile.InputProfile;
 import ru.homework.dto.profile.OutputProfile;
@@ -13,26 +14,32 @@ import java.util.Date;
 public class DepartmentView {
 
     @NotEmpty(groups = {InputProfile.Update.class})
+    @ApiModelProperty(notes = "id департамента")
     private int id;
 
     @JsonView(OutputProfile.Short.class)
     @NotEmpty(groups = {InputProfile.Create.class, InputProfile.Name.class})
-    @Size(max = 100, groups = {InputProfile.Update.class})
+    @Size(max = 100, groups = {InputProfile.Create.class, InputProfile.Update.class})
+    @ApiModelProperty(notes = "Название департамента")
     private String name;
 
     @JsonView(OutputProfile.Short.class)
     @NotEmpty(groups = {InputProfile.Create.class})
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(notes = "Дата создания")
     private Date creationDay;
 
     @JsonView(OutputProfile.Short.class)
     @NotEmpty(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Вышестоящий департамент")
     private int headDepartmentId;
 
     @JsonView(OutputProfile.DepartmentInfo.class)
+    @ApiModelProperty(notes = "Начальник департамента")
     private String chief;
 
     @JsonView(OutputProfile.DepartmentInfo.class)
+    @ApiModelProperty(notes = "Количество сотрудников")
     private int employersCount;
 
     public int getId() {

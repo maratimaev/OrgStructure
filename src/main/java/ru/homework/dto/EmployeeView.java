@@ -1,5 +1,6 @@
 package ru.homework.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.homework.dto.profile.InputProfile;
 import ru.homework.dto.validator.DismissalDay;
@@ -16,57 +17,71 @@ import java.util.Date;
 public class EmployeeView {
 
     @NotEmpty(groups = {InputProfile.Update.class})
+    @ApiModelProperty(notes = "id сотрудника")
     private int id;
 
     @NotEmpty(groups = {InputProfile.Create.class})
     @Size(max = 100, groups = {InputProfile.Create.class})
     @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Имя сотрудника")
     private String name;
 
     @NotEmpty(groups = {InputProfile.Create.class})
     @Size(max = 100, groups = {InputProfile.Create.class})
     @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Фамилия сотрудника")
     private String secondName;
 
     @Size(max = 100, groups = {InputProfile.Create.class})
     @Pattern(regexp = "^[А-Яа-я]+$", groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Отчество сотрудника")
     private String middleName;
 
     @NotNull(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Пол")
     private boolean sex;
 
     @NotNull(groups = {InputProfile.Create.class})
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(notes = "Дата рождения")
     private Date birthday;
 
     @NotNull(groups = {InputProfile.Create.class})
     @Size(max = 11, groups = {InputProfile.Create.class})
     @Pattern(regexp = "^[“+-0123456789() ]+$", groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Номер телефона")
     private String phoneNumber;
 
     @NotNull(groups = {InputProfile.Create.class})
     @Email(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Электронная почта")
     private String email;
 
     @NotNull(groups = {InputProfile.Create.class})
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(notes = "Дата трудоустройства")
     private Date employmentDay;
 
     @NotEmpty(groups = {InputProfile.Dismiss.class})
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(notes = "Дата увольнения")
     private Date dismissalDay;
 
     @NotNull(groups = {InputProfile.Create.class})
     @Digits(integer = 10, fraction = 0, groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Зарплата")
     private BigDecimal salary;
 
     @NotNull(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Начальник департамента?")
     private boolean chief;
 
     @NotNull(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Id должность")
     private int positionId;
 
     @NotNull(groups = {InputProfile.Create.class})
+    @ApiModelProperty(notes = "Id департамента")
     private int departmentId;
 
     public int getId() {

@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.homework.dto.DepartmentView;
 import ru.homework.dto.EmployeeView;
+import ru.homework.exception.CustomException;
 import ru.homework.mapper.MapperFacade;
 import ru.homework.model.Department;
 import ru.homework.model.Employee;
 import ru.homework.repository.DepartmentRepository;
 import ru.homework.service.DepartmentService;
+import ru.homework.service.schedulled.SalaryFundService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,6 +30,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private MapperFacade mapperFacade;
 
+    @Autowired
+    private SalaryFundService salaryFundService;
+
     @Override
     @Transactional(readOnly = true)
     public DepartmentView findByName(String name) {
@@ -36,6 +41,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Department> findAll() {
+        return departmentRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public DepartmentView get(int id) {
         Department department = findById(id);
         DepartmentView departmentView = mapperFacade.map(department, DepartmentView.class);
@@ -49,6 +61,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BigDecimal salaryFund(int id) {
         List<Employee> employees = employeeService.findEmployersInDepartment(id);
         BigDecimal salaryFund = new BigDecimal(0);
@@ -56,6 +69,42 @@ public class DepartmentServiceImpl implements DepartmentService {
             salaryFund = salaryFund.add(employee.getSalary());
         }
         return salaryFund;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DepartmentView> findChildDepartments(int id, boolean allHierarchy) {
+        List<Department> childDepartments = new ArrayList<>();
+        Department department = findById(id);
+        if (allHierarchy) {
+            childDepartments = getAllChilds(department, childDepartments);
+        } else {
+            childDepartments = department.getChildDepartments();
+        }
+        return mapperFacade.mapAsList(childDepartments, DepartmentView.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DepartmentView> findHeadDepartments(int id) {
+        Department department = findById(id);
+        Department headDepartment = department.getHeadDepartment();
+        List<Department> headDepartments = new ArrayList<>();
+        while (headDepartment != null) {
+            headDepartments.add(headDepartment);
+            headDepartment = headDepartment.getHeadDepartment();
+        }
+        return mapperFacade.mapAsList(headDepartments, DepartmentView.class);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Department findById(int id) {
+        Optional<Department> optional = departmentRepository.findById(id);
+        if (!optional.isPresent()) {
+            throw new CustomException(String.format("Департамент с id = %s не найден", id));
+        }
+        return optional.get();
     }
 
     @Override
@@ -71,70 +120,38 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentView update(DepartmentView departmentView) {
         Department department = findById(departmentView.getId());
         if (!department.getName().equals(departmentView.getName())) {
-            //todo error doubled name
-            if(departmentRepository.findDepartmentByName(departmentView.getName()) == null) {
-                department.setName(departmentView.getName());
+            if(departmentRepository.findDepartmentByName(departmentView.getName()) != null) {
+                throw new CustomException(String.format("Департамент с названием %s уже существует", departmentView.getName()));
             }
+            department.setName(departmentView.getName());
         }
-        if (department.getHeadDepartment().getId() != (departmentView.getHeadDepartmentId())) { //todo check for null
+        if (department.getHeadDepartment() != null && department.getHeadDepartment().getId() != departmentView.getHeadDepartmentId()) {
             for(Department child : department.getChildDepartments()) {
                 child.setHeadDepartment(department.getHeadDepartment());
+                departmentRepository.saveAndFlush(child);
             }
-            Department headDepartment = findById(departmentView.getHeadDepartmentId()); //todo check for department existence
+            Department headDepartment = findById(departmentView.getHeadDepartmentId());
             department.setHeadDepartment(headDepartment);
             department.setChildDepartments(null);
         }
         departmentRepository.saveAndFlush(department);
-        DepartmentView departmentView1 = mapperFacade.map(department, DepartmentView.class);
-        return departmentView1;
+        return mapperFacade.map(department, DepartmentView.class);
     }
 
     @Override
     @Transactional
     public void delete(int id) {
         List<EmployeeView> employeeViews = employeeService.findEmployerViewsInDepartment(id);
-        if (employeeViews == null) {
-            throw new RuntimeException();
+        if (!employeeViews.isEmpty()) {
+            throw new CustomException("В департаменте есть сотрудники");
         }
         Department department = findById(id);
+        for (Department child : department.getChildDepartments()) {
+            child.setHeadDepartment(department.getHeadDepartment());
+            departmentRepository.saveAndFlush(child);
+        }
+        salaryFundService.delete(salaryFundService.get(department.getId()));
         departmentRepository.delete(department);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<DepartmentView> findChildDepartments(int id, boolean allHierarchy) {
-        List<Department> childDepartments = new ArrayList<>();
-        Department department = findById(id);
-        if (allHierarchy) {
-            childDepartments = getAllChilds(department, childDepartments);
-        } else {
-            childDepartments = department.getChildDepartments();
-        }
-        List<DepartmentView> departmentViews = mapperFacade.mapAsList(childDepartments, DepartmentView.class);
-        return departmentViews;
-    }
-
-    @Override
-    public List<DepartmentView> findHeadDepartments(int id) {
-        Department department = findById(id);
-        Department headDepartment = department.getHeadDepartment();
-        List<Department> headDepartments = new ArrayList<>();
-        while (headDepartment != null) {
-            headDepartments.add(headDepartment);
-            headDepartment = headDepartment.getHeadDepartment();
-        }
-        List<DepartmentView> departmentViews = mapperFacade.mapAsList(headDepartments, DepartmentView.class);
-        return departmentViews;
-    }
-
-    @Override
-    public Department findById(int id) {
-        Optional<Department> optional = departmentRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new RuntimeException();
-            //todo
-        }
-        return optional.get();
     }
 
     private List<Department> getAllChilds(Department department, List<Department> result) {

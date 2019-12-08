@@ -1,11 +1,12 @@
+DROP TABLE IF EXISTS salary;
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS position;
 DROP TABLE IF EXISTS department;
 CREATE TABLE IF NOT EXISTS position (
-                                             id                  SERIAL PRIMARY KEY,
-                                             name                varchar(100) NOT NULL,
-                                             description         varchar(500),
-                                             version             integer
+                                          id                  SERIAL PRIMARY KEY,
+                                          name                varchar(100) NOT NULL,
+                                          description         varchar(500),
+                                          version             integer
 );
 
 CREATE TABLE IF NOT EXISTS department (
@@ -39,3 +40,12 @@ ALTER TABLE employee ADD FOREIGN KEY (position_id) REFERENCES position(id);
 CREATE INDEX IX_position_id ON employee (position_id);
 ALTER TABLE employee ADD FOREIGN KEY (department_id) REFERENCES department(id);
 CREATE INDEX IX_department_id ON employee (department_id);
+
+CREATE TABLE salary
+(
+                                          id            SERIAL PRIMARY KEY,
+                                          department_id integer not null,
+                                          fund_salary   numeric NOT NULL
+);
+ALTER TABLE salary ADD FOREIGN KEY (department_id) REFERENCES department(id);
+CREATE INDEX IX_salary_department_id ON salary (department_id);
