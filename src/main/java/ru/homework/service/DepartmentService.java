@@ -24,6 +24,11 @@ public interface DepartmentService {
      */
     Department findById(int id);
 
+    /** Поиск всех департаментов
+     * @return список DTO департаментов
+     */
+    List<Department> findAll();
+
     /** Поиск подчиненных департаментов
      * @param id исходного департамента
      * @param allHierarchy признак запроса (true = вся иерерхия, false = только непосредственно подчиненных)
