@@ -1,5 +1,8 @@
 package ru.homework.exception;
 
+/**
+ * Обертка для вывода ошибок
+ */
 public class CustomException extends RuntimeException {
     private String param;
 

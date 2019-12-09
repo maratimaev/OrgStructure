@@ -12,16 +12,28 @@ import javax.persistence.Version;
 @Table(name = "position")
 public class Position {
 
+    /**
+     * ID должности
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * Название должности
+     */
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
+    /**
+     * описание должности
+     */
     @Column(name = "description", length = 500)
     private String description;
 
+    /**
+     * Служебное поле для механизма оптимистичных блокировок
+     */
     @Version
     private int version;
 
