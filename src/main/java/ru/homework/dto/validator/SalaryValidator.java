@@ -10,6 +10,9 @@ import ru.homework.service.EmployeeService;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * Реализация аннотации @Salary
+ */
 public class SalaryValidator implements ConstraintValidator<Salary, EmployeeView> {
 
     @Autowired

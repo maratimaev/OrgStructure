@@ -1,5 +1,8 @@
 package ru.homework.dto.result;
 
+/**
+ * Обертка для сообщения об ошибке
+ */
 public class Error {
     private String error;
 

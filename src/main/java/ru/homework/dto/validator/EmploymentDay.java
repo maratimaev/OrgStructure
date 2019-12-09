@@ -13,6 +13,9 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Аннотация для проверки даты приема и дня рождения сотрудника
+ */
 @Documented
 @Constraint(validatedBy = EmploymentDayValidator.class)
 @Target({TYPE})

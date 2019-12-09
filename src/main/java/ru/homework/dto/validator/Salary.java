@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Аннотация для проверки размеров зарплат начальника и подчиненного
+ */
 @Documented
 @Constraint(validatedBy = SalaryValidator.class)
 @Target({TYPE})

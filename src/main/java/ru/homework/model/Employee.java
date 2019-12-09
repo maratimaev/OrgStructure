@@ -8,54 +8,99 @@ import java.util.Date;
 @Table(name = "employee")
 public class Employee {
 
+    /**
+     * ID сотрудника
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * Имя сотрудника
+     */
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
+    /**
+     * Фамилия сотрудника
+     */
     @Column(name = "second_name", length = 100, nullable = false)
     private String secondName;
 
+    /**
+     * Отчество сотрудника
+     */
     @Column(name = "middle_name", length = 100)
     private String middleName;
 
+    /**
+     * Пол сотрудника (мужской = true, женский = false)
+     */
     @Column(name = "sex", nullable = false)
     private boolean sex = false;
 
+    /**
+     * День рождения сотрудника
+     */
     @Column(name = "birthday", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
+    /**
+     * Телефонный номер
+     */
     @Column(name = "phone_number", length = 11, nullable = false)
     private String phoneNumber;
 
+    /**
+     * Почтовый адрес
+     */
     @Column(name = "email", length = 100, nullable = false)
     private String email;
 
+    /**
+     * Дата приема на работу
+     */
     @Column(name = "employment_day", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date employmentDay;
 
+    /**
+     * Дата увольнения
+     */
     @Column(name = "dismissal_day")
     @Temporal(TemporalType.DATE)
     private Date dismissalDay;
 
+    /**
+     * Оклад
+     */
     @Column(name = "salary", nullable = false)
     private BigDecimal salary;
 
+    /**
+     * Начальник сотрудника
+     */
     @Column(name = "chief", nullable = false)
     private boolean chief = false;
 
+    /**
+     * Должность сотрудника
+     */
     @OneToOne
     @JoinColumn(name = "position_id")
     private Position position;
 
+    /**
+     * Департамент сотрудника
+     */
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
+    /**
+     * Служебное поле для механизма оптимистичных блокировок
+     */
     @Version
     private int version;
 

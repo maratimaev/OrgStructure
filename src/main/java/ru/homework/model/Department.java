@@ -22,27 +22,48 @@ import java.util.List;
 @Table(name = "department")
 public class Department {
 
+    /**
+     * ID департамента
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * Название департамента
+     */
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
+    /**
+     * Дата создания департамента
+     */
     @Column(name = "creation_day", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date creationDay;
 
+    /**
+     * Вышестоящий департамент
+     */
     @ManyToOne(cascade={CascadeType.ALL})
     @JoinColumn(name = "head_department_id")
     private Department headDepartment;
 
+    /**
+     * Подчиненные департаменты
+     */
     @OneToMany(mappedBy = "headDepartment")
     private List<Department> childDepartments;
 
+    /**
+     * Сотрудники департамента
+     */
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
     private List<Employee> employees;
 
+    /**
+     * Служебное поле для механизма оптимистичных блокировок
+     */
     @Version
     private int version;
 
