@@ -11,17 +11,27 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 
+/**
+ * Таблица для хранения ФОТ департаментов
+ */
 @Entity
 @Table(name = "salary")
 public class Salary {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * Департамент
+     */
     @OneToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
+    /**
+     * Сумма зарплат сотрудников департамента
+     */
     @Column(name = "fund_salary", nullable = false)
     private BigDecimal salary;
 

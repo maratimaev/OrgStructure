@@ -21,12 +21,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис для сохранения ФОТ департаментов, каждые 5 минут
+ */
 @Configuration
 @EnableScheduling
 public class SalaryFundService {
-
-    @Autowired
-    private EmployeeService employeeService;
 
     @Autowired
     private DepartmentService departmentService;
@@ -34,8 +34,11 @@ public class SalaryFundService {
     @Autowired
     private SalaryRepository salaryRepository;
 
+    /**
+     * Сервис подсчета и записи в БД ФОТ департамента
+     */
     @Scheduled(cron = "5 * * * * ?")
-    public void reportCurrentTime() {
+    public void calcFundSalary() {
         List<Department> departments = departmentService.findAll();
         for (Department department : departments) {
             BigDecimal fundSalary = new BigDecimal(0);
@@ -49,15 +52,22 @@ public class SalaryFundService {
         }
     }
 
+    /** Получение ФОТ департамента
+     * @param department департамент
+     * @return ФОТ департамента
+     */
     @Transactional(readOnly = true)
-    public Salary get(int id) {
-        Optional<Salary> optional = salaryRepository.findById(id);
-        if (!optional.isPresent()) {
-            throw new CustomException(String.format("Фонд оплаты департамента c id = %s не найден", id));
+    public Salary get(Department department) {
+        Salary salary = salaryRepository.findByDepartment(department);
+        if (salary == null) {
+            throw new CustomException(String.format("Фонд оплаты департамента c departmentId = %s не найден", department.getId()));
         }
-        return optional.get();
+        return salary;
     }
 
+    /** Удаление ФОТ департамента
+     * @param salary департамента
+     */
     @Transactional
     public void delete(Salary salary) {
         salaryRepository.delete(salary);

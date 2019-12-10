@@ -2,8 +2,6 @@ package ru.homework.service;
 
 import ru.homework.model.Position;
 
-import java.util.Optional;
-
 /**
  * Сервис для работы с должностями
  */

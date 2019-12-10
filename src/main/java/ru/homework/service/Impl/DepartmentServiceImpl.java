@@ -62,13 +62,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(readOnly = true)
-    public BigDecimal salaryFund(int id) {
-        List<Employee> employees = employeeService.findEmployersInDepartment(id);
-        BigDecimal salaryFund = new BigDecimal(0);
-        for (Employee employee : employees) {
-            salaryFund = salaryFund.add(employee.getSalary());
-        }
-        return salaryFund;
+    public BigDecimal salaryFund(int departmentId) {
+        return salaryFundService.get(findById(departmentId)).getSalary();
     }
 
     @Override
@@ -150,7 +145,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             child.setHeadDepartment(department.getHeadDepartment());
             departmentRepository.saveAndFlush(child);
         }
-        salaryFundService.delete(salaryFundService.get(department.getId()));
+        salaryFundService.delete(salaryFundService.get(department));
         departmentRepository.delete(department);
     }
 

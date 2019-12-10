@@ -5,7 +5,6 @@ import ru.homework.model.Department;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Сервис работы с департаментами
@@ -49,10 +48,10 @@ public interface DepartmentService {
     DepartmentView get(int id);
 
     /** Запрос фонда оплаты труда сотрудников департамента
-     * @param id департамента
+     * @param departmentId департамента
      * @return суммарный ФОТ
      */
-    BigDecimal salaryFund(int id);
+    BigDecimal salaryFund(int departmentId);
 
     /** Создание департамента
      * @param departmentView DTO департамента
