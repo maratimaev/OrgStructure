@@ -1,5 +1,6 @@
 package ru.homework.service;
 
+import ru.homework.dto.PositionView;
 import ru.homework.model.Position;
 
 /**
@@ -11,4 +12,14 @@ public interface PositionService {
      * @return модель должности
      */
     Position findById(int id);
+
+    /** Создание должности
+     * @param positionView DTO должности
+     */
+    Position create(PositionView positionView);
+
+    /** Удаление дожности
+     * @param position модель должности
+     */
+    void delete(Integer positionId);
 }

@@ -115,8 +115,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             checkChiefExistence(employee, employee.getDepartment());
             employee.setPosition(positionService.findById(employeeView.getPositionId()));
         }
-        employeeRepository.saveAndFlush(employee);
-        return mapperFacade.map(employee, EmployeeView.class);
+        Employee result = employeeRepository.saveAndFlush(employee);
+        return mapperFacade.map(result, EmployeeView.class);
     }
 
     @Override

@@ -129,8 +129,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setHeadDepartment(headDepartment);
             department.setChildDepartments(null);
         }
-        departmentRepository.saveAndFlush(department);
-        return mapperFacade.map(department, DepartmentView.class);
+        Department result = departmentRepository.saveAndFlush(department);
+        return mapperFacade.map(result, DepartmentView.class);
     }
 
     @Override
